@@ -3,35 +3,37 @@ import styles from "./App.module.css";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [keyword, setKeyword] = useState("");
-  const onClick = (event) => {
-    setCount((current) => current + 1);
-  };
-  const onChange = (event) => {
-    setKeyword(event.target.value);
-  };
-  useEffect(() => {
-    console.log("한 번만 실행됩니다")
-  }, []);
-  useEffect(() => {
-    console.log("카운터가 바뀌었습니다")
-  }, [count]);
-  useEffect(() => {
-    if (keyword !== "" && keyword.length > 3) {
-      console.log("Search For " + keyword);
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  const onChange = (event) => setToDo(event.target.value);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
     }
-  }, [keyword]);
+    setToDos((currentArray) => [toDo, ...toDos]);
+    setToDo("");
+  };
+  console.log(toDos);
+
   return (
     <div>
-      <input
-        value={keyword}
-        onChange={onChange}
-        type="text"
-        placeholder="Search here ..."
-      />
-      <h1 className={styles.title}>Welcome Back! count is {count}</h1>
-      <button onClick={onClick}>Count +1</button>
+      <h1>My To Dos = {toDos.length}</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChange}
+          value={toDo}
+          text="text"
+          placeholder="Write your to do ..."
+        />
+        <button>Add To Do</button>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, index) => 
+          <li key={index}>{item}</li>
+        )}
+      </ul>
     </div>
   );
 }
